@@ -42,36 +42,42 @@ def build_text_embed(model_clip, caption):
 
 def train_ram_plus(model, data_loader, optimizer, epoch, device, config, model_clip):
     # train
-    model.train()  
-    
+    model.train()
+    use_amp = config.get('use_amp', False)
+    accum_steps = config.get('gradient_accumulation_steps', 1)
+    scaler = torch.amp.GradScaler('cuda', enabled=use_amp)
+
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter('lr', utils.SmoothedValue(window_size=50, fmt='{value:.6f}'))
     metric_logger.add_meter('loss_tag', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
     metric_logger.add_meter('loss_dis', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
     metric_logger.add_meter('loss_alignment', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
-    
+
     header = 'Train Epoch: [{}]'.format(epoch)
-    print_freq = 50   
-    
+    print_freq = 50
+
     data_loader.sampler.set_epoch(epoch)
 
     for i, (image, image_224, caption, image_tag, parse_tag) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
 
-        optimizer.zero_grad()
+        batch_text_embed = build_text_embed(model_clip, caption)
 
-        batch_text_embed = build_text_embed(model_clip,caption)
-        
-        image = image.to(device,non_blocking=True)
-        image_224 = image_224.to(device,non_blocking=True)
+        image = image.to(device, non_blocking=True)
+        image_224 = image_224.to(device, non_blocking=True)
 
         with torch.no_grad():
             clip_image_feature = model_clip.encode_image(image_224)
 
-        loss_tag, loss_dis, loss_alignment = model(image, caption, image_tag, clip_image_feature, batch_text_embed)  
-        loss = loss_tag + loss_dis + loss_alignment
+        with torch.amp.autocast('cuda', enabled=use_amp):
+            loss_tag, loss_dis, loss_alignment = model(image, caption, image_tag, clip_image_feature, batch_text_embed)
+            loss = (loss_tag + loss_dis + loss_alignment) / accum_steps
 
-        loss.backward()
-        optimizer.step()    
+        scaler.scale(loss).backward()
+
+        if (i + 1) % accum_steps == 0:
+            scaler.step(optimizer)
+            scaler.update()
+            optimizer.zero_grad()
 
         metric_logger.update(loss_tag=loss_tag.item())
         metric_logger.update(loss_dis=loss_dis.item())
@@ -88,34 +94,40 @@ def train_ram_plus(model, data_loader, optimizer, epoch, device, config, model_c
 
 def train_ram(model, data_loader, optimizer, epoch, device, config, model_clip):
     # train
-    model.train()  
-    
+    model.train()
+    use_amp = config.get('use_amp', False)
+    accum_steps = config.get('gradient_accumulation_steps', 1)
+    scaler = torch.amp.GradScaler('cuda', enabled=use_amp)
+
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter('lr', utils.SmoothedValue(window_size=50, fmt='{value:.6f}'))
     metric_logger.add_meter('loss_t2t', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
     metric_logger.add_meter('loss_tag', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
     metric_logger.add_meter('loss_dis', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
-    
+
     header = 'Train Epoch: [{}]'.format(epoch)
-    print_freq = 50   
-    
+    print_freq = 50
+
     data_loader.sampler.set_epoch(epoch)
 
     for i, (image, image_224, caption, image_tag, parse_tag) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
 
-        optimizer.zero_grad()
-        
-        image = image.to(device,non_blocking=True)
-        image_224 = image_224.to(device,non_blocking=True)
+        image = image.to(device, non_blocking=True)
+        image_224 = image_224.to(device, non_blocking=True)
 
         with torch.no_grad():
             clip_image_feature = model_clip.encode_image(image_224)
 
-        loss_t2t, loss_tag, loss_dis = model(image, caption, image_tag, parse_tag, clip_image_feature)  
-        loss = loss_t2t + loss_tag/(loss_tag/loss_t2t).detach() + loss_dis  
+        with torch.amp.autocast('cuda', enabled=use_amp):
+            loss_t2t, loss_tag, loss_dis = model(image, caption, image_tag, parse_tag, clip_image_feature)
+            loss = (loss_t2t + loss_tag/(loss_tag/loss_t2t).detach() + loss_dis) / accum_steps
 
-        loss.backward()
-        optimizer.step()    
+        scaler.scale(loss).backward()
+
+        if (i + 1) % accum_steps == 0:
+            scaler.step(optimizer)
+            scaler.update()
+            optimizer.zero_grad()
 
         metric_logger.update(loss_t2t=loss_t2t.item())
         metric_logger.update(loss_tag=loss_tag.item())
@@ -131,30 +143,35 @@ def train_ram(model, data_loader, optimizer, epoch, device, config, model_clip):
 
 def train_tag2text(model, data_loader, optimizer, epoch, device, config):
     # train
-    model.train()  
-    
+    model.train()
+    use_amp = config.get('use_amp', False)
+    accum_steps = config.get('gradient_accumulation_steps', 1)
+    scaler = torch.amp.GradScaler('cuda', enabled=use_amp)
+
     metric_logger = utils.MetricLogger(delimiter="  ")
     metric_logger.add_meter('lr', utils.SmoothedValue(window_size=50, fmt='{value:.6f}'))
     metric_logger.add_meter('loss_t2t', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
     metric_logger.add_meter('loss_tag', utils.SmoothedValue(window_size=50, fmt='{value:.4f}'))
-    
+
     header = 'Train Epoch: [{}]'.format(epoch)
-    print_freq = 50   
-    
+    print_freq = 50
+
     data_loader.sampler.set_epoch(epoch)
 
     for i, (image, _, caption, _, parse_tag) in enumerate(metric_logger.log_every(data_loader, print_freq, header)):
 
+        image = image.to(device, non_blocking=True)
 
-        optimizer.zero_grad()
-        
-        image = image.to(device,non_blocking=True)
+        with torch.amp.autocast('cuda', enabled=use_amp):
+            loss_t2t, loss_tag = model(image, caption, parse_tag)
+            loss = (loss_t2t + loss_tag/(loss_tag/loss_t2t).detach()) / accum_steps
 
-        loss_t2t, loss_tag = model(image, caption, parse_tag)  
-        loss = loss_t2t + loss_tag/(loss_tag/loss_t2t).detach()   
+        scaler.scale(loss).backward()
 
-        loss.backward()
-        optimizer.step()    
+        if (i + 1) % accum_steps == 0:
+            scaler.step(optimizer)
+            scaler.update()
+            optimizer.zero_grad()
 
         metric_logger.update(loss_t2t=loss_t2t.item())
         metric_logger.update(loss_tag=loss_tag.item())
@@ -221,6 +238,12 @@ def main(args, config):
     model_clip = model_clip.to(device)
     for _, param in model_clip.named_parameters():
         param.requires_grad = False
+
+    ### Freeze ViT backbone if requested (OOM fallback) ###
+    if args.freeze_vit:
+        for param in model.visual_encoder.parameters():
+            param.requires_grad = False
+        print("ViT backbone frozen — only training tagging head")
 
     ### Frozen label embedding for open-set recogniztion ###
     model.label_embed.requires_grad = False
@@ -298,6 +321,7 @@ if __name__ == '__main__':
     parser.add_argument('--output-dir', default='output/Pretrain')  
     parser.add_argument('--checkpoint', default='')
     parser.add_argument('--resume', default='', help='Resume training from this checkpoint (e.g., output/checkpoint_latest.pth)')
+    parser.add_argument('--freeze-vit', action='store_true', help='Freeze ViT backbone to save VRAM (fallback for OOM)')
     parser.add_argument('--evaluate', action='store_true')    
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--seed', default=42, type=int)
