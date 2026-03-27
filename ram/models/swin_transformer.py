@@ -645,7 +645,7 @@ def interpolate_relative_pos_embed(rel_pos_bias, dst_num_pos, param_name=''):
 
         for i in range(num_attn_heads):
             z = rel_pos_bias[:, i].view(src_size, src_size).float().numpy()
-            f = interpolate.interp2d(x, y, z, kind='cubic')
+            f = interpolate.RectBivariateSpline(x, y, z)
             all_rel_pos_bias.append(
                 torch.Tensor(f(dx, dy)).contiguous().view(-1, 1).to(rel_pos_bias.device))
 
