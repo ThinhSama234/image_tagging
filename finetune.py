@@ -227,42 +227,65 @@ def main(args, config):
     optimizer = torch.optim.AdamW(filter(lambda x: x.requires_grad, model.parameters()), lr=config['init_lr'], weight_decay=config['weight_decay'])
     
     start_epoch = 0
-    
+
+    # Resume from checkpoint if --resume is specified
+    if args.resume:
+        resume_ckpt = torch.load(args.resume, map_location='cpu')
+        model.load_state_dict(resume_ckpt['model'])
+        optimizer.load_state_dict(resume_ckpt['optimizer'])
+        start_epoch = resume_ckpt['epoch'] + 1
+        print(f"Resumed from epoch {resume_ckpt['epoch']}, starting epoch {start_epoch}")
+        del resume_ckpt
+
     model_without_ddp = model
     if args.distributed:
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu])
-        model_without_ddp = model.module    
-        
+        model_without_ddp = model.module
+
+    best_loss = float('inf')
     print("Start training")
-    start_time = time.time()    
+    start_time = time.time()
     for epoch in range(start_epoch, config['max_epoch']):
-        
+
         cosine_lr_schedule(optimizer, epoch, config['max_epoch'], config['init_lr'], config['min_lr'])
 
         if args.model_type == 'ram_plus':
-            train_stats = train_ram_plus(model, data_loader, optimizer, epoch, device, config, model_clip) 
+            train_stats = train_ram_plus(model, data_loader, optimizer, epoch, device, config, model_clip)
         elif args.model_type == 'ram':
-            train_stats = train_ram(model, data_loader, optimizer, epoch, device, config, model_clip) 
+            train_stats = train_ram(model, data_loader, optimizer, epoch, device, config, model_clip)
         elif args.model_type == 'tag2text':
-            train_stats = train_tag2text(model, data_loader, optimizer, epoch, device, config) 
+            train_stats = train_tag2text(model, data_loader, optimizer, epoch, device, config)
 
-        if utils.is_main_process():  
+        if utils.is_main_process():
             log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                          'epoch': epoch,
-                        }                     
+                        }
             save_obj = {
                 'model': model_without_ddp.state_dict(),
                 'optimizer': optimizer.state_dict(),
                 'config': config,
                 'epoch': epoch,
             }
-            torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_%02d.pth'%epoch))  
-            
+
+            # Always save latest (overwrite) — safety net for resume
+            torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_latest.pth'))
+
+            # Save per-epoch checkpoint
+            torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_%02d.pth'%epoch))
+
+            # Track best model by total loss
+            total_loss = sum(float(v) for v in train_stats.values() if v != train_stats.get('lr'))
+            if total_loss < best_loss:
+                best_loss = total_loss
+                torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_best.pth'))
+                print(f"New best model at epoch {epoch} (loss={total_loss:.4f})")
+
             with open(os.path.join(args.output_dir, "log.txt"),"a") as f:
                 f.write(json.dumps(log_stats) + "\n")
 
-        dist.barrier()        
-                
+        if args.distributed:
+            dist.barrier()
+
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
     print('Training time {}'.format(total_time_str)) 
@@ -273,7 +296,8 @@ if __name__ == '__main__':
     parser.add_argument('--config', default='./configs/pretrain.yaml')
     parser.add_argument("--model-type",type=str,choices=("ram_plus", "ram", "tag2text"),required=True)
     parser.add_argument('--output-dir', default='output/Pretrain')  
-    parser.add_argument('--checkpoint', default='')    
+    parser.add_argument('--checkpoint', default='')
+    parser.add_argument('--resume', default='', help='Resume training from this checkpoint (e.g., output/checkpoint_latest.pth)')
     parser.add_argument('--evaluate', action='store_true')    
     parser.add_argument('--device', default='cuda')
     parser.add_argument('--seed', default=42, type=int)

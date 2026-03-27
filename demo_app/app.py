@@ -36,6 +36,32 @@ DEVICE = None
 # ---------------------------------------------------------------------------
 # Model loading
 # ---------------------------------------------------------------------------
+def init_model_skeleton(model_type: str, image_size: int, device: torch.device):
+    """Initialize model architecture WITHOUT loading checkpoint (fast)."""
+    if model_type == "ram_plus":
+        vit = "swin_l"
+        model = ram_plus(pretrained='', image_size=image_size, vit=vit)
+    elif model_type == "ram":
+        vit = "swin_l"
+        model = ram(pretrained='', image_size=image_size, vit=vit)
+    elif model_type == "tag2text":
+        vit = "swin_b"
+        delete_tag_index = [127, 2961, 3351, 3265, 3338, 3355, 3359]
+        model = tag2text(
+            pretrained='',
+            image_size=image_size,
+            vit=vit,
+            delete_tag_index=delete_tag_index,
+        )
+        model.threshold = 0.68
+    else:
+        raise ValueError(f"Unknown model type: {model_type}")
+
+    model.eval()
+    model = model.to(device)
+    return model
+
+
 def load_model(model_type: str, checkpoint: str, image_size: int, device: torch.device):
     """Load the specified model and return it in eval mode."""
     if model_type == "ram_plus":
@@ -372,6 +398,17 @@ def parse_args():
         action="store_true",
         help="Create a public Gradio share link",
     )
+    parser.add_argument(
+        "--cache-dir",
+        type=str,
+        default=os.path.join(os.path.dirname(__file__), ".cache"),
+        help="Directory to cache processed model state (speeds up restart)",
+    )
+    parser.add_argument(
+        "--no-cache",
+        action="store_true",
+        help="Disable model caching, always load from original checkpoint",
+    )
     return parser.parse_args()
 
 
@@ -409,17 +446,67 @@ if __name__ == "__main__":
             sys.exit(1)
     print(f"Checkpoint: {checkpoint}")
 
-    # Load model
+    # Load model (with caching support)
     MODEL_TYPE = args.model_type
-    print(f"Loading {MODEL_TYPE} model...")
-    MODEL = load_model(MODEL_TYPE, checkpoint, args.image_size, DEVICE)
+    cache_file = os.path.join(
+        args.cache_dir,
+        f"{MODEL_TYPE}_{args.image_size}_cache.pth",
+    )
+
+    if not args.no_cache and os.path.isfile(cache_file):
+        # Fast path: load from cache (TRUE fast - no checkpoint parsing)
+        import time as _time
+        t0 = _time.time()
+        print(f"Loading {MODEL_TYPE} from cache: {cache_file}")
+        # Init model skeleton only (no checkpoint loading)
+        MODEL = init_model_skeleton(MODEL_TYPE, args.image_size, DEVICE)
+        # Load cached state dict
+        cached = torch.load(cache_file, map_location=DEVICE, weights_only=False)
+        MODEL.load_state_dict(cached["model_state"], strict=False)
+        MODEL.eval()
+        print(f"✅ Model loaded from cache in {_time.time()-t0:.1f}s (fast!)")
+    else:
+        # Normal path: load from original checkpoint
+        import time as _time
+        t0 = _time.time()
+        print(f"Loading {MODEL_TYPE} model from checkpoint...")
+        MODEL = load_model(MODEL_TYPE, checkpoint, args.image_size, DEVICE)
+        print(f"Model loaded in {_time.time()-t0:.1f}s")
+
+        # Save cache for next time
+        if not args.no_cache:
+            os.makedirs(args.cache_dir, exist_ok=True)
+            torch.save(
+                {"model_state": MODEL.state_dict(), "model_type": MODEL_TYPE},
+                cache_file,
+            )
+            print(f"Model cached to: {cache_file}")
+
     TRANSFORM = get_transform(image_size=args.image_size)
-    print(f"Model loaded successfully!")
+    print(f"Model ready! ({MODEL_TYPE} on {DEVICE})")
 
     # Build and launch UI
     demo = build_ui()
-    demo.launch(
-        server_name="0.0.0.0",
-        server_port=args.port,
-        share=args.share,
-    )
+    
+    # Prepare allowed paths for example images
+    images_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "images"))
+    allowed_paths = [images_dir] if os.path.isdir(images_dir) else []
+    
+    # Try to launch with localhost. If it fails, user should use --share flag
+    try:
+        demo.launch(
+            server_name="localhost",
+            server_port=args.port,
+            share=args.share,
+            allowed_paths=allowed_paths,
+        )
+    except ValueError as e:
+        if "localhost is not accessible" in str(e):
+            print("\n" + "="*60)
+            print("⚠️  Localhost không accessible trên máy bạn.")
+            print("Vui lòng chạy lại với flag --share để tạo public link:")
+            print(f"  python app.py --model-type {MODEL_TYPE} --share")
+            print("="*60 + "\n")
+            raise
+        else:
+            raise

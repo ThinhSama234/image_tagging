@@ -7,6 +7,7 @@ __pycache__/
 *.so
 
 # Distribution / packaging
+.claude\
 .Python
 build/
 develop-eggs/
@@ -138,3 +139,21 @@ outputs/
 
 # gradio cache
 gradio_cached_examples/
+.claude/
+*.md
+*.txt
+*.jpg
+*.zip
+*.png
+*.jpeg
+*.bmp
+*.webp
+*.tiff
+*.gif
+
+# Dataset archives & processed data
+batch_image/archive/
+datasets/
+pretrained/
+output/
+*.pem
