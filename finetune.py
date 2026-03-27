@@ -330,10 +330,14 @@ if __name__ == '__main__':
     parser.add_argument('--distributed', default=True, type=bool)
     args = parser.parse_args()
 
-    config = yaml.load(open(args.config, 'r'), Loader=yaml.Loader)
+    yml = yaml.YAML(typ='safe')
+    with open(args.config, 'r') as f:
+        config = yml.load(f)
 
     Path(args.output_dir).mkdir(parents=True, exist_ok=True)
-        
-    yaml.dump(config, open(os.path.join(args.output_dir, 'config.yaml'), 'w'))    
+
+    yml_out = yaml.YAML()
+    with open(os.path.join(args.output_dir, 'config.yaml'), 'w') as f:
+        yml_out.dump(config, f)    
     
     main(args, config)
