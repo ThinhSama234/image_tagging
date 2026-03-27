@@ -1,0 +1,19 @@
+train_file:
+  - 'datasets/flickr30k/train_mini.json'
+
+image_path_root: "batch_image/archive/flickr30k_images/flickr30k_images"
+
+vit: 'swin_l'
+vit_grad_ckpt: True
+vit_ckpt_layer: 0
+
+image_size: 384
+batch_size: 2
+
+weight_decay: 0.05
+init_lr: 5e-06
+min_lr: 0
+max_epoch: 1
+warmup_steps: 10
+
+class_num: 4585

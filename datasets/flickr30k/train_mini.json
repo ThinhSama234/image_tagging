@@ -1,0 +1,746 @@
+[
+  {
+    "image_path": "1430154945.jpg",
+    "caption": [
+      "At a table in a restaurant , a girl is trying to get a little boy to eat .",
+      "A mother helps her little boy eat his food by feeding him by hand .",
+      "A young lady wearing yellow is feeding a small child at the table .",
+      "A mother is trying to get her son to eat food at a restaurant .",
+      "Woman sitting at table feeding child who is sitting on her lap"
+    ],
+    "union_label_id": [
+      879,
+      1301,
+      1459,
+      1460,
+      1599,
+      1634,
+      1729,
+      1871,
+      2372,
+      2700,
+      4439,
+      4532,
+      4568
+    ],
+    "parse_label_id": [
+      [
+        879,
+        1301,
+        1459,
+        1460,
+        1599,
+        1634,
+        1729,
+        1871,
+        2372,
+        2700,
+        4439,
+        4532,
+        4568
+      ],
+      [
+        879,
+        1301,
+        1459,
+        1460,
+        1599,
+        1634,
+        1729,
+        1871,
+        2372,
+        2700,
+        4439,
+        4532,
+        4568
+      ],
+      [
+        879,
+        1301,
+        1459,
+        1460,
+        1599,
+        1634,
+        1729,
+        1871,
+        2372,
+        2700,
+        4439,
+        4532,
+        4568
+      ],
+      [
+        879,
+        1301,
+        1459,
+        1460,
+        1599,
+        1634,
+        1729,
+        1871,
+        2372,
+        2700,
+        4439,
+        4532,
+        4568
+      ],
+      [
+        879,
+        1301,
+        1459,
+        1460,
+        1599,
+        1634,
+        1729,
+        1871,
+        2372,
+        2700,
+        4439,
+        4532,
+        4568
+      ]
+    ]
+  },
+  {
+    "image_path": "2504010674.jpg",
+    "caption": [
+      "A man in a suit with gold buttons and a name tag gestures with his hands as he speaks to another man in a dress shirt who is holding a beverage in a glass .",
+      "The chairman and his executive having sharing ideas of the company during break time at the company headquarters .",
+      "A man holding a glass of water converses with a man in a suit .",
+      "Two men talking to each other .",
+      "Two well dressed men talking ."
+    ],
+    "union_label_id": [
+      409,
+      662,
+      948,
+      1050,
+      1402,
+      1634,
+      2537,
+      3212,
+      3609,
+      3981
+    ],
+    "parse_label_id": [
+      [
+        409,
+        662,
+        948,
+        1050,
+        1402,
+        1634,
+        2537,
+        3212,
+        3609,
+        3981
+      ],
+      [
+        409,
+        662,
+        948,
+        1050,
+        1402,
+        1634,
+        2537,
+        3212,
+        3609,
+        3981
+      ],
+      [
+        409,
+        662,
+        948,
+        1050,
+        1402,
+        1634,
+        2537,
+        3212,
+        3609,
+        3981
+      ],
+      [
+        409,
+        662,
+        948,
+        1050,
+        1402,
+        1634,
+        2537,
+        3212,
+        3609,
+        3981
+      ],
+      [
+        409,
+        662,
+        948,
+        1050,
+        1402,
+        1634,
+        2537,
+        3212,
+        3609,
+        3981
+      ]
+    ]
+  },
+  {
+    "image_path": "3111482098.jpg",
+    "caption": [
+      "A person on a large wheeled vehicle drives through an orange desert landscape .",
+      "Distant person riding off-road vehicle across sand dunes marked with treads .",
+      "A person on an ATV in dunes with a purple sky .",
+      "An ATV rides over a vast sandy landscape .",
+      "A person rides an ATV through the desert ."
+    ],
+    "union_label_id": [
+      174,
+      1297,
+      1438,
+      2163,
+      2368,
+      3721,
+      4341
+    ],
+    "parse_label_id": [
+      [
+        174,
+        1297,
+        1438,
+        2163,
+        2368,
+        3721,
+        4341
+      ],
+      [
+        174,
+        1297,
+        1438,
+        2163,
+        2368,
+        3721,
+        4341
+      ],
+      [
+        174,
+        1297,
+        1438,
+        2163,
+        2368,
+        3721,
+        4341
+      ],
+      [
+        174,
+        1297,
+        1438,
+        2163,
+        2368,
+        3721,
+        4341
+      ],
+      [
+        174,
+        1297,
+        1438,
+        2163,
+        2368,
+        3721,
+        4341
+      ]
+    ]
+  },
+  {
+    "image_path": "4528309462.jpg",
+    "caption": [
+      "A woman , wearing a gray coat , places clothing into a washing machine at a laundromat .",
+      "A woman is placing the final articles of clothing from her cart into a washing machine .",
+      "Someone is removing laundry from a machine in a laundry mat .",
+      "A woman wearing a gray sweater uses a washing machine .",
+      "A woman attends to her laundry in a laundromat ."
+    ],
+    "union_label_id": [
+      149,
+      763,
+      980,
+      995,
+      2163,
+      2388,
+      2514,
+      2594,
+      3361,
+      4027,
+      4322,
+      4406,
+      4439,
+      4532
+    ],
+    "parse_label_id": [
+      [
+        149,
+        763,
+        980,
+        995,
+        2163,
+        2388,
+        2514,
+        2594,
+        3361,
+        4027,
+        4322,
+        4406,
+        4439,
+        4532
+      ],
+      [
+        149,
+        763,
+        980,
+        995,
+        2163,
+        2388,
+        2514,
+        2594,
+        3361,
+        4027,
+        4322,
+        4406,
+        4439,
+        4532
+      ],
+      [
+        149,
+        763,
+        980,
+        995,
+        2163,
+        2388,
+        2514,
+        2594,
+        3361,
+        4027,
+        4322,
+        4406,
+        4439,
+        4532
+      ],
+      [
+        149,
+        763,
+        980,
+        995,
+        2163,
+        2388,
+        2514,
+        2594,
+        3361,
+        4027,
+        4322,
+        4406,
+        4439,
+        4532
+      ],
+      [
+        149,
+        763,
+        980,
+        995,
+        2163,
+        2388,
+        2514,
+        2594,
+        3361,
+        4027,
+        4322,
+        4406,
+        4439,
+        4532
+      ]
+    ]
+  },
+  {
+    "image_path": "5566135246.jpg",
+    "caption": [
+      "A young rhythmic gymnastic is watching a yellow hula hoop go by during her routine .",
+      "A young female gymnast is laying down on a mat while looking at a hula-hoop .",
+      "A young girl in a costume on the ground , with a hula hoop next to her .",
+      "A young girl stretching on the ground next to a large yellow hula hoop .",
+      "Two men heading home up the river shore ."
+    ],
+    "union_label_id": [
+      1135,
+      1871,
+      1985,
+      2162,
+      2362,
+      2537,
+      2594
+    ],
+    "parse_label_id": [
+      [
+        1135,
+        1871,
+        1985,
+        2162,
+        2362,
+        2537,
+        2594
+      ],
+      [
+        1135,
+        1871,
+        1985,
+        2162,
+        2362,
+        2537,
+        2594
+      ],
+      [
+        1135,
+        1871,
+        1985,
+        2162,
+        2362,
+        2537,
+        2594
+      ],
+      [
+        1135,
+        1871,
+        1985,
+        2162,
+        2362,
+        2537,
+        2594
+      ],
+      [
+        1135,
+        1871,
+        1985,
+        2162,
+        2362,
+        2537,
+        2594
+      ]
+    ]
+  },
+  {
+    "image_path": "2330030299.jpg",
+    "caption": [
+      "A fireman stands with his back to the camera in front of a background filled with smoke .",
+      "A firefighter looks at another firefighter in the blurry distance .",
+      "A firefighter staring off into the distance at the chaos .",
+      "A firefighter is working at a fire .",
+      "Firefighter responding to a call ."
+    ],
+    "union_label_id": [
+      215,
+      684,
+      690,
+      1638,
+      1647,
+      3746
+    ],
+    "parse_label_id": [
+      [
+        215,
+        684,
+        690,
+        1638,
+        1647,
+        3746
+      ],
+      [
+        215,
+        684,
+        690,
+        1638,
+        1647,
+        3746
+      ],
+      [
+        215,
+        684,
+        690,
+        1638,
+        1647,
+        3746
+      ],
+      [
+        215,
+        684,
+        690,
+        1638,
+        1647,
+        3746
+      ],
+      [
+        215,
+        684,
+        690,
+        1638,
+        1647,
+        3746
+      ]
+    ]
+  },
+  {
+    "image_path": "4701518180.jpg",
+    "caption": [
+      "Dressed in high-waisted blue jeans , boots and a blue shirt with a gold \" B \" on the front is talking on the phone .",
+      "A man with a uniform is standing and using his cellular phone .",
+      "A man with a book is leaning on a pole in the sidewalk .",
+      "A man talking on his cellphone on the street .",
+      "This gentleman is talking on the phone ."
+    ],
+    "union_label_id": [
+      512,
+      521,
+      2537,
+      3146,
+      3634,
+      4315
+    ],
+    "parse_label_id": [
+      [
+        512,
+        521,
+        2537,
+        3146,
+        3634,
+        4315
+      ],
+      [
+        512,
+        521,
+        2537,
+        3146,
+        3634,
+        4315
+      ],
+      [
+        512,
+        521,
+        2537,
+        3146,
+        3634,
+        4315
+      ],
+      [
+        512,
+        521,
+        2537,
+        3146,
+        3634,
+        4315
+      ],
+      [
+        512,
+        521,
+        2537,
+        3146,
+        3634,
+        4315
+      ]
+    ]
+  },
+  {
+    "image_path": "4517193541.jpg",
+    "caption": [
+      "A red flower-box filled with green flowers lies on the stone windowsill behind iron grating along a side street .",
+      "A group of buildings surrounding a street with people walking down it .",
+      "Three people are pictured walking down and alleyway .",
+      "An empty alleyway with blocked off windows .",
+      "Some plants are growing near the window ."
+    ],
+    "union_label_id": [
+      55,
+      108,
+      613,
+      1702,
+      1705,
+      1965,
+      3093,
+      4501
+    ],
+    "parse_label_id": [
+      [
+        55,
+        108,
+        613,
+        1702,
+        1705,
+        1965,
+        3093,
+        4501
+      ],
+      [
+        55,
+        108,
+        613,
+        1702,
+        1705,
+        1965,
+        3093,
+        4501
+      ],
+      [
+        55,
+        108,
+        613,
+        1702,
+        1705,
+        1965,
+        3093,
+        4501
+      ],
+      [
+        55,
+        108,
+        613,
+        1702,
+        1705,
+        1965,
+        3093,
+        4501
+      ],
+      [
+        55,
+        108,
+        613,
+        1702,
+        1705,
+        1965,
+        3093,
+        4501
+      ]
+    ]
+  },
+  {
+    "image_path": "416840980.jpg",
+    "caption": [
+      "A young girl in blue in a swinging outside with her eyes closed and hands off the swing 's chains .",
+      "A little girl in jeans and a blue striped shirt is swinging on the swing with her hands out .",
+      "A girl swinging on swing set with her eyes clothes and arms outstretched on a sunny day .",
+      "A young girl closes her eyes and releases her hands as she enjoys the swing set .",
+      "A young girl is swinging with her arms outstretched ."
+    ],
+    "union_label_id": [
+      129,
+      480,
+      819,
+      1550,
+      1634,
+      1871,
+      3634,
+      4036
+    ],
+    "parse_label_id": [
+      [
+        129,
+        480,
+        819,
+        1550,
+        1634,
+        1871,
+        3634,
+        4036
+      ],
+      [
+        129,
+        480,
+        819,
+        1550,
+        1634,
+        1871,
+        3634,
+        4036
+      ],
+      [
+        129,
+        480,
+        819,
+        1550,
+        1634,
+        1871,
+        3634,
+        4036
+      ],
+      [
+        129,
+        480,
+        819,
+        1550,
+        1634,
+        1871,
+        3634,
+        4036
+      ],
+      [
+        129,
+        480,
+        819,
+        1550,
+        1634,
+        1871,
+        3634,
+        4036
+      ]
+    ]
+  },
+  {
+    "image_path": "4888308769.jpg",
+    "caption": [
+      "A asian male rides a bike in the streets of a large brightly lit city .",
+      "A man riding a bike tries to cross a busy street .",
+      "A cyclist riding through a busy part of a city .",
+      "A boy on a bicycle is looking at the building .",
+      "A bicycler is admiring the city life ."
+    ],
+    "union_label_id": [
+      414,
+      613,
+      936,
+      2537,
+      2706
+    ],
+    "parse_label_id": [
+      [
+        414,
+        613,
+        936,
+        2537,
+        2706
+      ],
+      [
+        414,
+        613,
+        936,
+        2537,
+        2706
+      ],
+      [
+        414,
+        613,
+        936,
+        2537,
+        2706
+      ],
+      [
+        414,
+        613,
+        936,
+        2537,
+        2706
+      ],
+      [
+        414,
+        613,
+        936,
+        2537,
+        2706
+      ]
+    ]
+  }
+]

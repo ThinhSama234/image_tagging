@@ -153,7 +153,6 @@ gradio_cached_examples/
 
 # Dataset archives & processed data
 batch_image/archive/
-datasets/
 pretrained/
 output/
 *.pem
