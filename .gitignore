@@ -139,8 +139,6 @@ outputs/
 
 # gradio cache
 gradio_cached_examples/
-.claude/
-*.md
 *.txt
 *.jpg
 *.zip
