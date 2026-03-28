@@ -258,7 +258,7 @@ vit_grad_ckpt: True
 vit_ckpt_layer: 0
 
 image_size: 384
-batch_size: 8
+batch_size: 2
 
 weight_decay: 0.05
 init_lr: 5e-06
