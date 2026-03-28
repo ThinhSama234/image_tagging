@@ -10,6 +10,7 @@ import random
 import time
 import datetime
 import json
+import shutil
 from pathlib import Path
 
 import torch
@@ -283,6 +284,18 @@ def main(args, config):
             log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                          'epoch': epoch,
                         }
+            # Check disk space before saving (need ~4GB for 2 checkpoints)
+            disk = shutil.disk_usage(args.output_dir)
+            free_gb = disk.free / (1024**3)
+            print(f"Disk free: {free_gb:.1f} GB")
+            if free_gb < 4.0:
+                # Remove old checkpoints to free space
+                for old_ckpt in ['checkpoint_latest.pth', 'checkpoint_best.pth']:
+                    old_path = os.path.join(args.output_dir, old_ckpt)
+                    if os.path.exists(old_path):
+                        os.remove(old_path)
+                        print(f"Removed {old_ckpt} to free disk space")
+
             # Save only model weights (no optimizer) to reduce checkpoint size ~50%
             save_obj = {
                 'model': model_without_ddp.state_dict(),
