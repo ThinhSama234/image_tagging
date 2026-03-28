@@ -283,18 +283,15 @@ def main(args, config):
             log_stats = {**{f'train_{k}': v for k, v in train_stats.items()},
                          'epoch': epoch,
                         }
+            # Save only model weights (no optimizer) to reduce checkpoint size ~50%
             save_obj = {
                 'model': model_without_ddp.state_dict(),
-                'optimizer': optimizer.state_dict(),
                 'config': config,
                 'epoch': epoch,
             }
 
             # Always save latest (overwrite) — safety net for resume
             torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_latest.pth'))
-
-            # Save per-epoch checkpoint
-            torch.save(save_obj, os.path.join(args.output_dir, 'checkpoint_%02d.pth'%epoch))
 
             # Track best model by total loss
             total_loss = sum(float(v) for v in train_stats.values() if v != train_stats.get('lr'))
