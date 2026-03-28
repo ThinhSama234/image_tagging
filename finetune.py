@@ -115,6 +115,8 @@ def train_ram(model, data_loader, optimizer, epoch, device, config, model_clip):
 
         image = image.to(device, non_blocking=True)
         image_224 = image_224.to(device, non_blocking=True)
+        image_tag = image_tag.to(device, non_blocking=True)
+        parse_tag = parse_tag.to(device, non_blocking=True)
 
         with torch.no_grad():
             clip_image_feature = model_clip.encode_image(image_224)
