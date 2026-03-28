@@ -1,7 +1,7 @@
 train_file:
   - 'datasets/flickr30k/train.json'
 
-image_path_root: "batch_image/archive/flickr30k_images/flickr30k_images"
+image_path_root: "/kaggle/input/datasets/hsankesara/flickr-image-dataset/flickr30k_images/flickr30k_images"
 
 vit: 'swin_l'
 vit_grad_ckpt: True

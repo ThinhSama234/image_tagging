@@ -173,6 +173,14 @@ def build_adapter(args) -> BaseAdapter:
             tags_csv=args.tags_csv,
             captions_csv=args.captions_csv,
         )
+    elif args.adapter == "voc":
+        from .voc_adapter import VocAdapter
+        return VocAdapter(
+            root=args.voc_root or "data/",
+            year=args.voc_year or "2012",
+            image_set=args.voc_split or "val",
+            download=not args.no_download,
+        )
     else:
         raise ValueError(f"Unknown adapter: {args.adapter}")
 
@@ -182,7 +190,7 @@ def main():
         description="Preprocess images+tags → RAM finetune JSON"
     )
     parser.add_argument(
-        "--adapter", required=True, choices=["csv", "folder", "flickr30k"],
+        "--adapter", required=True, choices=["csv", "folder", "flickr30k", "voc"],
         help="Data source adapter type"
     )
     parser.add_argument("--csv-path", help="CSV file path (for csv adapter)")
@@ -192,6 +200,12 @@ def main():
     parser.add_argument("--image-dir", help="Image directory (for folder adapter)")
     parser.add_argument("--labels-file", help="Labels file (for folder adapter, optional)")
     parser.add_argument("--tag-sep", default="|", help="Tag separator in source data")
+    # VOC adapter args
+    parser.add_argument("--voc-root", default="data/", help="VOC dataset root (for voc adapter)")
+    parser.add_argument("--voc-year", default="2012", help="VOC year (for voc adapter)")
+    parser.add_argument("--voc-split", default="val", choices=["train", "val", "trainval"],
+                        help="VOC split (for voc adapter)")
+    parser.add_argument("--no-download", action="store_true", help="Skip dataset download")
     parser.add_argument(
         "--tag-list", default=DEFAULT_TAG_LIST,
         help="Path to ram_tag_list.txt"
