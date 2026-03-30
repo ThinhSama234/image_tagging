@@ -18,7 +18,7 @@ from .base_adapter import BaseAdapter, RawEntry
 # VOC class name → RAM tag name(s) for matching
 # Some VOC classes use different names in RAM's 4585 tag list
 VOC_TO_RAM_TAGS = {
-    "aeroplane": ["airplane"],
+    "aeroplane": ["airliner"],
     "bicycle": ["bicycle"],
     "bird": ["bird"],
     "boat": ["boat"],

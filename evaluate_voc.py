@@ -42,7 +42,7 @@ VOC_CLASSES = [
 
 # Map VOC class → set of RAM tag strings that count as correct prediction
 VOC_TO_RAM_SYNONYMS = {
-    "aeroplane": {"airplane", "aeroplane", "aircraft", "plane"},
+    "aeroplane": {"airplane", "aeroplane", "aircraft", "plane", "airliner"},
     "bicycle": {"bicycle", "bike"},
     "bird": {"bird"},
     "boat": {"boat", "ship", "watercraft"},
