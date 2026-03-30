@@ -1,4 +1,4 @@
-Môn học: Khoa học máy tính nâng cao
+Môn học: Khoa học máy tính nâng cao \\
 Nhóm: KHMT15
 Thành viên:
 - Trần Quốc Thịnh - 25C11065
